@@ -1,4 +1,6 @@
 const db = require("../models");
+const io = require("../../socket");
+
 const Counter = db.Counter;
 
 exports.create = (req, res) => {
@@ -32,6 +34,10 @@ exports.update = (req, res) => {
   })
     .then((num) => {
       if (num == 1) {
+        io.getIO().emit("counter", {
+          action: "create",
+          counter: { ...req.body },
+        });
         res.send({
           message: "Counter was updated successfully.",
         });

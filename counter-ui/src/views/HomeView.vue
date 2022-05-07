@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import openSocket from "socket.io-client";
+
 export default {
   name: "HomeView",
   data() {
@@ -60,6 +62,12 @@ export default {
   },
   mounted() {
     this.fetchCounter();
+    const socket = openSocket("http://127.0.0.1:3000");
+    socket.on("counter", (data) => {
+      if (data.action === "create") {
+        this.fetchCounter();
+      }
+    });
   },
 };
 </script>
